@@ -158,8 +158,11 @@
 </div>
 
 <script>
-    // ВАШ URL ИЗ GOOGLE APPS SCRIPT
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbAszQvjwFGGxMhIaOFEILS1ic-9h_MvBQJgvbh1JAAtkC5Krz8548rLg-ZalgSkFp/exec";
+    // Адрес вашего сервера express-botx через bore.pub
+    const API_URL = "http://bore.pub:44039/api/v1/send";
+    
+    // API-ключ для авторизации (из логов express-botx)
+    const API_KEY = "da51206effd8bcc614ce6ed4719a2f721589e00926f76765a4ace7ff5f16cda1";
     
     document.getElementById("trainForm").addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -179,6 +182,24 @@
             reportDate: document.getElementById("reportDate").value.trim()
         };
         
+        // Формируем сообщение для express-botx (он ожидает поле "message")
+        const avgCheck = formData.revenue / formData.checkCount;
+        const messageText = `🚆 **Сменный отчёт по поезду**
+
+📌 **Поезд:** ${formData.trainNumber}
+🗺️ **Маршрут:** ${formData.route}
+📅 **Дата:** ${formData.reportDate}
+
+💰 **Выручка:** ${formData.revenue.toLocaleString()} ₽
+🧾 **Чеков:** ${formData.checkCount} шт.
+📊 **Средний чек:** ${Math.round(avgCheck).toLocaleString()} ₽
+
+👥 **Пассажиры:** ГП ${formData.gp} | СВ ${formData.sv}
+🔥 **ОГД:** ${formData.ogd}
+✅ **Замечания:** ${formData.remarks}
+⚠️ **Неисправности:** ${formData.malfunction}
+👤 **ДВР:** ${formData.dvr}`;
+        
         const btn = document.querySelector("button");
         const msgDiv = document.getElementById("statusMessage");
         
@@ -186,20 +207,23 @@
         btn.innerText = "⏳ Отправка...";
         
         try {
-            // Используем fetch с режимом no-cors для обхода CORS
-            const response = await fetch(SCRIPT_URL, {
+            const response = await fetch(API_URL, {
                 method: "POST",
-                mode: "no-cors",
                 headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + API_KEY
                 },
-                body: "data=" + encodeURIComponent(JSON.stringify(formData))
+                body: JSON.stringify({ message: messageText })
             });
             
-            // При mode: "no-cors" мы не можем прочитать ответ
-            // Поэтому показываем успех, если нет явной ошибки
-            msgDiv.className = "message success";
-            msgDiv.innerText = "✅ Отчёт отправлен! Проверьте чат в eXpress.";
+            if (response.ok) {
+                msgDiv.className = "message success";
+                msgDiv.innerText = "✅ Отчёт отправлен в eXpress!";
+            } else {
+                const errorText = await response.text();
+                msgDiv.className = "message error";
+                msgDiv.innerText = "❌ Ошибка сервера: " + response.status + " - " + errorText;
+            }
             
             setTimeout(() => {
                 msgDiv.style.display = "none";
@@ -208,7 +232,7 @@
         } catch (error) {
             console.error("Ошибка:", error);
             msgDiv.className = "message error";
-            msgDiv.innerText = "❌ Ошибка: " + error.message;
+            msgDiv.innerText = "❌ Ошибка соединения: " + error.message;
         } finally {
             btn.disabled = false;
             btn.innerText = "📨 Отправить отчёт в eXpress";
