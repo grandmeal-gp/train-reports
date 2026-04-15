@@ -159,7 +159,7 @@
 
 <script>
     // ВАШ URL ИЗ GOOGLE APPS SCRIPT
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlaYekiPjnCivPPGCgoKO5QPv3eqzkIT2BX7lhgegBl1hT6r9p7EKmIIiHaNV7wLY/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzIxPexJFvlmjNG_KSnwC8u70GchDeB6OH-ikQDMFPeSOBe0pgDkM0hamGtOLp5m-VD/exec";
     
     document.getElementById("trainForm").addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -185,58 +185,34 @@
         btn.disabled = true;
         btn.innerText = "⏳ Отправка...";
         
-        // Используем iframe для обхода CORS
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
-        
-        // Отправляем данные через POST в iframe
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = SCRIPT_URL;
-        form.target = iframe.name;
-        
-        // Добавляем данные как скрытые поля
-        const dataField = document.createElement('input');
-        dataField.type = 'hidden';
-        dataField.name = 'data';
-        dataField.value = JSON.stringify(formData);
-        form.appendChild(dataField);
-        
-        document.body.appendChild(form);
-        
-        // Обработчик ответа от iframe
-        iframe.onload = function() {
-            try {
-                // Пытаемся прочитать ответ
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                const responseText = iframeDoc.body.innerText;
-                const response = JSON.parse(responseText);
-                
-                if (response.status === "success") {
-                    msgDiv.className = "message success";
-                    msgDiv.innerText = "✅ " + (response.message || "Отправлено в eXpress!");
-                } else {
-                    msgDiv.className = "message error";
-                    msgDiv.innerText = "❌ Ошибка: " + (response.message || "неизвестная ошибка");
-                }
-            } catch (err) {
-                msgDiv.className = "message success";
-                msgDiv.innerText = "✅ Отправлено! (ответ не удалось прочитать)";
-            }
+        try {
+            // Используем fetch с режимом no-cors для обхода CORS
+            const response = await fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "data=" + encodeURIComponent(JSON.stringify(formData))
+            });
             
-            // Очистка
+            // При mode: "no-cors" мы не можем прочитать ответ
+            // Поэтому показываем успех, если нет явной ошибки
+            msgDiv.className = "message success";
+            msgDiv.innerText = "✅ Отчёт отправлен! Проверьте чат в eXpress.";
+            
             setTimeout(() => {
-                document.body.removeChild(form);
-                document.body.removeChild(iframe);
                 msgDiv.style.display = "none";
-            }, 3000);
+            }, 5000);
             
+        } catch (error) {
+            console.error("Ошибка:", error);
+            msgDiv.className = "message error";
+            msgDiv.innerText = "❌ Ошибка: " + error.message;
+        } finally {
             btn.disabled = false;
             btn.innerText = "📨 Отправить отчёт в eXpress";
-        };
-        
-        form.submit();
+        }
     });
 </script>
 </body>
