@@ -2,87 +2,57 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Отчёт по поезду</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: linear-gradient(135deg, #0b2b3b, #1a4a6f);
             padding: 30px 20px;
             min-height: 100vh;
         }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
+        .container { max-width: 800px; margin: 0 auto; }
         .card {
             background: white;
             border-radius: 32px;
             padding: 32px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
-
-        h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            color: #0b2b3b;
-        }
-
+        h1 { font-size: 28px; margin-bottom: 8px; color: #0b2b3b; }
         .sub {
             color: #4a627a;
             margin-bottom: 28px;
             border-left: 4px solid #1e88e5;
             padding-left: 14px;
         }
-
-        .field {
-            margin-bottom: 20px;
-        }
-
+        .field { margin-bottom: 20px; }
         label {
             font-weight: 600;
             display: block;
             margin-bottom: 6px;
             color: #0f3b4f;
         }
-
         .label-hint {
             font-size: 12px;
             font-weight: normal;
             color: #6c7e97;
             margin-left: 8px;
         }
-
-        input, textarea, select {
+        input, select, textarea {
             width: 100%;
             padding: 12px 14px;
             border: 1px solid #cbd5e1;
             border-radius: 16px;
             font-size: 15px;
-            transition: 0.2s;
             font-family: inherit;
         }
-
-        input:focus, textarea:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #1e88e5;
             box-shadow: 0 0 0 3px rgba(30,136,229,0.2);
         }
-
-        .row-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
+        .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         button {
             background: #1e88e5;
             color: white;
@@ -96,42 +66,29 @@
             transition: 0.2s;
             margin-top: 10px;
         }
-
-        button:hover {
-            background: #0b5e8a;
-            transform: scale(1.01);
-        }
-
+        button:hover { background: #0b5e8a; transform: scale(1.01); }
         button:disabled {
             background: #9ab3c9;
             cursor: not-allowed;
             transform: none;
         }
-
         .message {
             margin-top: 20px;
             padding: 12px;
             border-radius: 20px;
             display: none;
         }
-
         .success {
             background: #e0f2e9;
             color: #1e5e3a;
             display: block;
             border-left: 5px solid #2e7d32;
         }
-
         .error {
             background: #ffe6e5;
             color: #b71c1c;
             display: block;
             border-left: 5px solid #d32f2f;
-        }
-
-        hr {
-            margin: 18px 0;
-            border-color: #e2e8f0;
         }
     </style>
 </head>
@@ -146,12 +103,10 @@
                 <label>🚂 Номер поезда</label>
                 <input type="text" id="trainNumber" value="П 7/8 с-1" placeholder="например П 7/8 с-1">
             </div>
-
             <div class="field">
                 <label>📍 Маршрут</label>
                 <input type="text" id="route" value="СПБ-Севастополь" placeholder="СПБ-Севастополь">
             </div>
-
             <div class="row-2">
                 <div class="field">
                     <label>💰 Выручка <span class="label-hint">(сумма в рублях)</span></label>
@@ -162,7 +117,6 @@
                     <input type="number" id="checkCount" value="157" placeholder="шт">
                 </div>
             </div>
-
             <div class="row-2">
                 <div class="field">
                     <label>🔥 ОГД (20)</label>
@@ -173,37 +127,30 @@
                     <input type="number" id="sv" value="18" placeholder="кол-во">
                 </div>
             </div>
-
             <div class="field">
                 <label>👥 ГП <span class="label-hint">(количество пассажиров)</span></label>
                 <input type="number" id="gp" value="127" placeholder="пассажиры">
             </div>
-
             <div class="field">
                 <label>✅ Замечания</label>
                 <input type="text" id="remarks" value="без замечаний" placeholder="без замечаний / есть">
             </div>
-
             <div class="field">
                 <label>⚠️ Неисправности / отказы</label>
                 <input type="text" id="malfunction" value="Не работает калорифер" placeholder="например калорифер">
             </div>
-
             <div class="field">
                 <label>📌 Происшествия</label>
                 <input type="text" id="incidents" value="Без происшествий">
             </div>
-
             <div class="field">
                 <label>👤 ДВР (дежурный)</label>
                 <input type="text" id="dvr" value="Бобчинская НЛ">
             </div>
-
             <div class="field">
                 <label>📅 Отчёт за дату</label>
                 <input type="text" id="reportDate" value="11.04.26" placeholder="день.месяц.год">
             </div>
-
             <button type="submit">📨 Отправить отчёт в eXpress</button>
         </form>
         <div id="statusMessage" class="message"></div>
@@ -211,13 +158,12 @@
 </div>
 
 <script>
-    // ========== ВАШ URL ИЗ GOOGLE APPS SCRIPT ==========
-    const API_URL ="https://script.google.com/macros/s/AKfycbwkr3Fa88hLLGXyBrtzdBTmgGm7kHdbWgIkYhnoPPwyCckfagYuMx8fVE2y3v463nND/exec";
-    // ==================================================
-
+    // ВАШ URL ИЗ GOOGLE APPS SCRIPT
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlaYekiPjnCivPPGCgoKO5QPv3eqzkIT2BX7lhgegBl1hT6r9p7EKmIIiHaNV7wLY/exec";
+    
     document.getElementById("trainForm").addEventListener("submit", async (e) => {
         e.preventDefault();
-
+        
         const formData = {
             trainNumber: document.getElementById("trainNumber").value.trim(),
             route: document.getElementById("route").value.trim(),
@@ -232,40 +178,65 @@
             dvr: document.getElementById("dvr").value.trim(),
             reportDate: document.getElementById("reportDate").value.trim()
         };
-
+        
         const btn = document.querySelector("button");
+        const msgDiv = document.getElementById("statusMessage");
+        
         btn.disabled = true;
         btn.innerText = "⏳ Отправка...";
-
-        try {
-            const response = await fetch(API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData)
-            });
-
-            const result = await response.json();
-            const msgDiv = document.getElementById("statusMessage");
-
-            if (response.ok && result.status === "success") {
+        
+        // Используем iframe для обхода CORS
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        
+        // Отправляем данные через POST в iframe
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = SCRIPT_URL;
+        form.target = iframe.name;
+        
+        // Добавляем данные как скрытые поля
+        const dataField = document.createElement('input');
+        dataField.type = 'hidden';
+        dataField.name = 'data';
+        dataField.value = JSON.stringify(formData);
+        form.appendChild(dataField);
+        
+        document.body.appendChild(form);
+        
+        // Обработчик ответа от iframe
+        iframe.onload = function() {
+            try {
+                // Пытаемся прочитать ответ
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const responseText = iframeDoc.body.innerText;
+                const response = JSON.parse(responseText);
+                
+                if (response.status === "success") {
+                    msgDiv.className = "message success";
+                    msgDiv.innerText = "✅ " + (response.message || "Отправлено в eXpress!");
+                } else {
+                    msgDiv.className = "message error";
+                    msgDiv.innerText = "❌ Ошибка: " + (response.message || "неизвестная ошибка");
+                }
+            } catch (err) {
                 msgDiv.className = "message success";
-                msgDiv.innerText = "✅ " + (result.message || "Отправлено в eXpress!");
-                setTimeout(() => {
-                    msgDiv.className = "message";
-                    msgDiv.style.display = "none";
-                }, 4000);
-            } else {
-                msgDiv.className = "message error";
-                msgDiv.innerText = "❌ Ошибка: " + (result.message || "неизвестная ошибка");
+                msgDiv.innerText = "✅ Отправлено! (ответ не удалось прочитать)";
             }
-        } catch (err) {
-            console.error("Ошибка:", err);
-            document.getElementById("statusMessage").className = "message error";
-            document.getElementById("statusMessage").innerText = "❌ Ошибка соединения. Проверьте интернет.";
-        } finally {
+            
+            // Очистка
+            setTimeout(() => {
+                document.body.removeChild(form);
+                document.body.removeChild(iframe);
+                msgDiv.style.display = "none";
+            }, 3000);
+            
             btn.disabled = false;
             btn.innerText = "📨 Отправить отчёт в eXpress";
-        }
+        };
+        
+        form.submit();
     });
 </script>
 </body>
