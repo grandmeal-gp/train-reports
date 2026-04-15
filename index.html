@@ -158,11 +158,8 @@
 </div>
 
 <script>
-    // Адрес вашего сервера express-botx через bore.pub
-    const API_URL = "https://spicy-pigs-see.loca.lt";
-    
-    // API-ключ для авторизации (из логов express-botx)
-    const API_KEY = "http://10.10.11.10/rest_bot/hs/express";
+    // Адрес вашего бота в локальной сети
+    const API_URL = "http://10.10.11.10/rest_bot/hs/express/";
     
     document.getElementById("trainForm").addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -182,24 +179,6 @@
             reportDate: document.getElementById("reportDate").value.trim()
         };
         
-        // Формируем сообщение для express-botx (он ожидает поле "message")
-        const avgCheck = formData.revenue / formData.checkCount;
-        const messageText = `🚆 **Сменный отчёт по поезду**
-
-📌 **Поезд:** ${formData.trainNumber}
-🗺️ **Маршрут:** ${formData.route}
-📅 **Дата:** ${formData.reportDate}
-
-💰 **Выручка:** ${formData.revenue.toLocaleString()} ₽
-🧾 **Чеков:** ${formData.checkCount} шт.
-📊 **Средний чек:** ${Math.round(avgCheck).toLocaleString()} ₽
-
-👥 **Пассажиры:** ГП ${formData.gp} | СВ ${formData.sv}
-🔥 **ОГД:** ${formData.ogd}
-✅ **Замечания:** ${formData.remarks}
-⚠️ **Неисправности:** ${formData.malfunction}
-👤 **ДВР:** ${formData.dvr}`;
-        
         const btn = document.querySelector("button");
         const msgDiv = document.getElementById("statusMessage");
         
@@ -211,9 +190,10 @@
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer " + API_KEY
+                    "X-Bot-Id": "21365786-0b9d-58ca-aaa7-d571f1bb91ab",
+                    "X-Secret": "0c2ce12e5c16c1fcdcec00085fb4a245"
                 },
-                body: JSON.stringify({ message: messageText })
+                body: JSON.stringify(formData)
             });
             
             if (response.ok) {
