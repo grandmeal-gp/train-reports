@@ -158,8 +158,11 @@
 </div>
 
 <script>
-    // Адрес вашего бота в локальной сети
-    const API_URL = "http://10.10.11.10/rest_bot/hs/express/";
+    // Адрес express-botx (ваш IP: 172.20.4.67)
+    const API_URL = "http://172.20.4.67:8080/api/v1/send";
+    
+    // API-ключ из логов express-botx
+    const API_KEY = "da51206effd8bcc614ce6ed4719a2f721589e00926f76765a4ace7ff5f16cda1";
     
     document.getElementById("trainForm").addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -179,6 +182,24 @@
             reportDate: document.getElementById("reportDate").value.trim()
         };
         
+        // Формируем сообщение для express-botx
+        const avgCheck = formData.revenue / formData.checkCount;
+        const messageText = `🚆 **Сменный отчёт по поезду**
+
+📌 **Поезд:** ${formData.trainNumber}
+🗺️ **Маршрут:** ${formData.route}
+📅 **Дата:** ${formData.reportDate}
+
+💰 **Выручка:** ${formData.revenue.toLocaleString()} ₽
+🧾 **Чеков:** ${formData.checkCount} шт.
+📊 **Средний чек:** ${Math.round(avgCheck).toLocaleString()} ₽
+
+👥 **Пассажиры:** ГП ${formData.gp} | СВ ${formData.sv}
+🔥 **ОГД:** ${formData.ogd}
+✅ **Замечания:** ${formData.remarks}
+⚠️ **Неисправности:** ${formData.malfunction}
+👤 **ДВР:** ${formData.dvr}`;
+        
         const btn = document.querySelector("button");
         const msgDiv = document.getElementById("statusMessage");
         
@@ -190,10 +211,9 @@
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-Bot-Id": "21365786-0b9d-58ca-aaa7-d571f1bb91ab",
-                    "X-Secret": "0c2ce12e5c16c1fcdcec00085fb4a245"
+                    "Authorization": "Bearer " + API_KEY
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify({ message: messageText })
             });
             
             if (response.ok) {
@@ -202,7 +222,7 @@
             } else {
                 const errorText = await response.text();
                 msgDiv.className = "message error";
-                msgDiv.innerText = "❌ Ошибка сервера: " + response.status + " - " + errorText;
+                msgDiv.innerText = "❌ Ошибка сервера: " + response.status;
             }
             
             setTimeout(() => {
