@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экспресс-отчёт по поезду</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Roboto', sans-serif;
+        }
+
+        body {
+            background: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .dashboard {
+            max-width: 1400px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: #0f172a;
+            color: white;
+            padding: 20px 28px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header span {
+            background: #3b82f6;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+
+        .two-columns {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .form-section {
+            flex: 1.2;
+            padding: 28px;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+        }
+
+        .chat-section {
+            flex: 1.8;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-height: 500px;
+            max-height: 600px;
+            background: #fefefe;
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            max-width: 90%;
+            animation: fadeSlide 0.2s ease;
+        }
+
+        .message.system {
+            align-items: flex-start;
+        }
+
+        .message.user {
+            align-items: flex-end;
+        }
+
+        .bubble {
+            padding: 12px 18px;
+            border-radius: 24px;
+            font-size: 0.95rem;
+            line-height: 1.45;
+            white-space: pre-wrap;
+            word-break: break-word;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        }
+
+        .system .bubble {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            color: #0f172a;
+            border-bottom-left-radius: 6px;
+        }
+
+        .user .bubble {
+            background: #3b82f6;
+            color: white;
+            border-bottom-right-radius: 6px;
+        }
+
+        .time {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 6px;
+            margin-inline: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+            color: #0f172a;
+            font-size: 0.85rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            background: white;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        .row-2 {
+            display: flex;
+            gap: 16px;
+        }
+
+        .row-2 .form-group {
+            flex: 1;
+        }
+
+        button {
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.15s;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background: #1e293b;
+            transform: scale(0.98);
+        }
+
+        .clear-chat {
+            background: #e2e8f0;
+            color: #1e293b;
+            margin-top: 8px;
+        }
+
+        .clear-chat:hover {
+            background: #cbd5e1;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <div class="header">
+        🚆 Экспресс-отчёт проводника
+        <span>Чат-интеграция</span>
+    </div>
+    <div class="two-columns">
+        <!-- ФОРМА ЗАПОЛНЕНИЯ -->
+        <div class="form-section">
+            <h3 style="margin-top:0;">📋 Данные по рейсу</h3>
+            <div class="form-group">
+                <label>🚂 Номер поезда</label>
+                <input type="text" id="trainNumber" placeholder="например: 042А" value="042А">
+            </div>
+            <div class="form-group">
+                <label>🗺️ Маршрут</label>
+                <input type="text" id="route" placeholder="Москва → Санкт-Петербург" value="Москва → Санкт-Петербург">
+            </div>
+            <div class="form-group">
+                <label>📅 Дата отчёта</label>
+                <input type="date" id="reportDate" value="2025-03-20">
+            </div>
+            <div class="row-2">
+                <div class="form-group">
+                    <label>💰 Выручка (₽)</label>
+                    <input type="number" id="revenue" value="157800">
+                </div>
+                <div class="form-group">
+                    <label>🧾 Количество чеков</label>
+                    <input type="number" id="checkCount" value="34">
+                </div>
+            </div>
+            <div class="row-2">
+                <div class="form-group">
+                    <label>👥 ГП</label>
+                    <input type="number" id="gp" value="42">
+                </div>
+                <div class="form-group">
+                    <label>👥 СВ</label>
+                    <input type="number" id="sv" value="18">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>👑 ЛЮКС</label>
+                <input type="number" id="lux" value="6" placeholder="количество пассажиров Люкс">
+            </div>
+            <div class="form-group">
+                <label>🔥 ОГД (особые группы) — можно писать несколько строк</label>
+                <textarea id="ogd" rows="3" placeholder="льготники, ветераны и т.д.&#10;Каждая новая строчка сохранится">дети-инвалиды (3 чел)
+пенсионеры (2 чел)</textarea>
+            </div>
+            <div class="form-group">
+                <label>✅ Замечания</label>
+                <textarea id="remarks" rows="2" placeholder="чистота, работа кондиционера...">Чисто, нареканий нет</textarea>
+            </div>
+            <div class="form-group">
+                <label>⚠️ Неисправности</label>
+                <textarea id="malfunction" rows="2" placeholder="поломки оборудования">Датчик двери в 5 вагоне</textarea>
+            </div>
+            <div class="form-group">
+                <label>👤 ДВР (дежурный по вагону)</label>
+                <input type="text" id="dvr" placeholder="ФИО" value="Иванов А.А.">
+            </div>
+            <button id="sendReportBtn">📤 Отправить отчёт в чат Express</button>
+            <button id="clearChatBtn" class="clear-chat" style="margin-top: 12px;">🗑 Очистить историю чата</button>
+        </div>
+
+        <!-- ЧАТ EXPRESS -->
+        <div class="chat-section">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message system">
+                    <div class="bubble">
+                        Заполните форму и нажмите «Отправить отчёт».<br>
+                        Сообщение появится как новое сообщение.<br>
+                        Скопируйте сообщение и направьте в чат Exspress в группу ДВРы Гранд-Питание
+                    </div>
+                    <div class="time">только что</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Элементы формы
+    const trainNumberInp = document.getElementById('trainNumber');
+    const routeInp = document.getElementById('route');
+    const reportDateInp = document.getElementById('reportDate');
+    const revenueInp = document.getElementById('revenue');
+    const checkCountInp = document.getElementById('checkCount');
+    const gpInp = document.getElementById('gp');
+    const svInp = document.getElementById('sv');
+    const luxInp = document.getElementById('lux');
+    const ogdInp = document.getElementById('ogd');
+    const remarksInp = document.getElementById('remarks');
+    const malfunctionInp = document.getElementById('malfunction');
+    const dvrInp = document.getElementById('dvr');
+
+    const chatContainer = document.getElementById('chatMessages');
+
+    function addMessageToChat(text, sender = 'system') {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.innerText = text;
+        
+        const timeSpan = document.createElement('div');
+        timeSpan.className = 'time';
+        const now = new Date();
+        timeSpan.innerText = now.toLocaleTimeString([], { hour: '2-digit', minute:'2-digit' });
+        
+        messageDiv.appendChild(bubble);
+        messageDiv.appendChild(timeSpan);
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function generateReportText() {
+        let trainNumber = trainNumberInp.value.trim() || "не указан";
+        let route = routeInp.value.trim() || "не указан";
+        let reportDate = reportDateInp.value || "дата не задана";
+        let revenue = parseFloat(revenueInp.value);
+        if (isNaN(revenue)) revenue = 0;
+        let checkCount = parseInt(checkCountInp.value);
+        if (isNaN(checkCount)) checkCount = 0;
+        let gp = gpInp.value || "0";
+        let sv = svInp.value || "0";
+        let lux = luxInp.value || "0";
+        let ogd = ogdInp.value.trim() || "—";
+        let remarks = remarksInp.value.trim() || "—";
+        let malfunction = malfunctionInp.value.trim() || "—";
+        let dvr = dvrInp.value.trim() || "—";
+
+        let avgCheck = (checkCount === 0) ? 0 : revenue / checkCount;
+
+        // Формируем отчёт (ОГД сохраняет переносы строк)
+        const report = `📌 Поезд: ${trainNumber}
+🗺️ Маршрут: ${route}
+📅 Дата: ${reportDate}
+
+💰 Выручка: ${revenue.toLocaleString()} ₽
+🧾 Чеков: ${checkCount.toLocaleString()} шт.
+📊 Средний чек: ${Math.round(avgCheck).toLocaleString()} ₽
+
+👥 Пассажиры: ГП ${gp} | СВ ${sv}
+👑 ЛЮКС: ${lux}
+🔥 ОГД:
+${ogd}
+✅ Замечания:
+${remarks}
+⚠️ Неисправности:
+${malfunction}
+👤 ДВР: ${dvr}`;
+
+        return report;
+    }
+
+    function sendReportToChat() {
+        const reportText = generateReportText();
+        if (!reportText) return;
+        addMessageToChat(reportText, 'user');
+    }
+
+    function clearChat() {
+        while (chatContainer.firstChild) {
+            chatContainer.removeChild(chatContainer.firstChild);
+        }
+        const welcomeDiv = document.createElement('div');
+        welcomeDiv.className = 'message system';
+        welcomeDiv.innerHTML = `<div class="bubble">Заполните форму и нажмите «Отправить отчёт».<br>
+                                 Сообщение появится как новое сообщение.<br>
+                                 Скопируйте сообщение и направьте в чат Exspress в группу ДВРы Гранд-Питание</div>
+                                <div class="time">${new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' })}</div>`;
+        chatContainer.appendChild(welcomeDiv);
+    }
+
+    document.getElementById('sendReportBtn').addEventListener('click', () => {
+        sendReportToChat();
+    });
+    
+    document.getElementById('clearChatBtn').addEventListener('click', () => {
+        clearChat();
+    });
+</script>
+</body>
+</html>
