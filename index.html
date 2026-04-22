@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Вагон-ресторан «Экспресс/Таврия» — заказ из купе</title>
+    <title>Вагон-ресторан — Заказ из купе в MAX</title>
     <style>
         * {
             margin: 0;
@@ -12,31 +12,30 @@
         }
 
         body {
-            background: #1e2a1c;
-            background-image: linear-gradient(145deg, #1f2a1d 0%, #121b10 100%);
+            background: linear-gradient(145deg, #2e3b2c 0%, #1f2a1d 100%);
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            padding: 20px 16px;
-        }
-
-        /* контейнер с прокруткой для длинного меню */
-        .order-wrapper {
-            max-width: 850px;
-            margin: 0 auto;
+            padding: 24px 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .order-card {
-            background: #fffaf0;
+            max-width: 650px;
+            width: 100%;
+            margin: 0 auto;
+            background: #fef7e0;
             border-radius: 48px 24px 48px 24px;
-            box-shadow: 0 30px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5);
             overflow: hidden;
         }
 
         .train-header {
-            background: #4a2a18;
-            background: linear-gradient(135deg, #6e3a22, #3e1f0f);
+            background: linear-gradient(135deg, #7c3a22, #56220f);
             padding: 20px 24px;
             color: #ffefcf;
-            border-bottom: 5px solid #e7b42c;
+            border-bottom: 4px solid #e7b42c;
         }
 
         .train-header h1 {
@@ -44,7 +43,6 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            flex-wrap: wrap;
         }
 
         .train-header h1:before {
@@ -52,79 +50,72 @@
             font-size: 2rem;
         }
 
-        .train-sub {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 8px;
-            font-size: 0.85rem;
-        }
-
         .badge {
             background: #2c2b26;
+            display: inline-block;
             padding: 4px 12px;
-            border-radius: 40px;
+            border-radius: 50px;
+            font-size: 0.8rem;
         }
 
-        /* Форма */
         .form-container {
-            padding: 24px 28px;
+            padding: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #3e2a1f;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 28px;
+            border: 1px solid #d6c29d;
+            background: #fffcf0;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #b87c2e;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(184,124,46,0.2);
         }
 
         .row-2 {
             display: flex;
-            gap: 20px;
+            gap: 16px;
             flex-wrap: wrap;
-            margin-bottom: 20px;
         }
 
-        .field {
+        .row-2 .form-group {
             flex: 1;
-            min-width: 150px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
         }
 
-        label {
-            font-weight: 700;
-            color: #4e3421;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        input, select, textarea {
-            padding: 10px 14px;
-            border-radius: 40px;
-            border: 1px solid #d6c29d;
-            background: white;
-            font-size: 0.95rem;
-        }
-
-        /* секции меню */
         .menu-category {
-            margin-top: 28px;
+            margin-top: 24px;
             border-top: 2px dashed #e2cfaa;
             padding-top: 16px;
         }
 
         .cat-title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: #7b3f1a;
             background: #fff0da;
             display: inline-block;
             padding: 4px 18px;
             border-radius: 60px;
-            margin-bottom: 18px;
-        }
-
-        .menu-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            margin-bottom: 16px;
         }
 
         .menu-item {
@@ -137,58 +128,32 @@
             align-items: center;
             justify-content: space-between;
             gap: 10px;
-        }
-
-        .item-desc {
-            flex: 3;
-            min-width: 180px;
+            margin-bottom: 10px;
         }
 
         .item-name {
             font-weight: 700;
-            display: block;
-        }
-
-        .item-details {
-            font-size: 0.7rem;
-            color: #7f6b4a;
-            margin-top: 4px;
         }
 
         .item-price {
-            font-weight: 800;
+            font-size: 0.8rem;
             color: #b45f2b;
-            white-space: nowrap;
-        }
-
-        .item-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
         }
 
         .qty-input {
             width: 70px;
             text-align: center;
             border-radius: 30px;
+            padding: 8px;
         }
 
-        .variants {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            font-size: 0.8rem;
-            margin-top: 5px;
-        }
-
-        .variant-label {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: #f3ebd4;
-            padding: 2px 8px;
-            border-radius: 30px;
+        .total-row {
+            text-align: right;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 20px 0;
+            padding-top: 15px;
+            border-top: 2px solid #e7b42c;
         }
 
         .submit-btn {
@@ -198,11 +163,10 @@
             padding: 16px;
             font-size: 1.2rem;
             font-weight: bold;
+            color: #2c2118;
             border-radius: 60px;
-            margin-top: 32px;
             cursor: pointer;
             transition: 0.2s;
-            box-shadow: 0 4px 0 #9b601e;
         }
 
         .submit-btn:hover {
@@ -210,21 +174,28 @@
             transform: translateY(-2px);
         }
 
+        .submit-btn:disabled {
+            opacity: 0.6;
+            transform: none;
+        }
+
         .order-message {
             margin-top: 20px;
             padding: 14px;
             border-radius: 28px;
-            background: #e9e3d0;
             display: none;
         }
 
-        .total-row {
-            text-align: right;
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin: 20px 0 0;
-            border-top: 2px solid #e7b42c;
-            padding-top: 15px;
+        .order-message.success {
+            background: #cfe6cd;
+            color: #1d4d1a;
+            display: block;
+        }
+
+        .order-message.error {
+            background: #ffe0cf;
+            color: #b13b1a;
+            display: block;
         }
 
         footer {
@@ -234,303 +205,275 @@
             font-size: 0.7rem;
         }
 
-        @media (max-width: 650px) {
-            .form-container {
-                padding: 16px;
-            }
-            .menu-item {
-                flex-direction: column;
-                align-items: stretch;
-            }
+        @media (max-width: 550px) {
+            .form-container { padding: 16px; }
+            .menu-item { flex-direction: column; align-items: stretch; }
+            .qty-input { width: 100%; }
         }
     </style>
 </head>
 <body>
-<div class="order-wrapper">
 <div class="order-card">
     <div class="train-header">
-        <h1>Вагон-ресторан «Экспресс/Таврия»</h1>
-        <div class="train-sub">
-            <span class="badge">🚪 Заказ из купе № ___</span>
-            <span class="badge">🍽️ Доставка к месту 15–30 мин</span>
-            <span class="badge">💳 Оплата в вагоне или по QR</span>
+        <h1>Вагон-ресторан</h1>
+        <div style="display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap;">
+            <span class="badge">🚪 Заказ из купе</span>
+            <span class="badge">🍽️ Доставка 15-25 мин</span>
+            <span class="badge">💳 Оплата в вагоне</span>
         </div>
     </div>
+
     <div class="form-container">
         <form id="orderForm">
             <div class="row-2">
-                <div class="field"><label>🚪 Номер купе</label><input type="text" id="coupe" placeholder="например, 7" required></div>
-                <div class="field"><label>🛏️ Место</label><input type="text" id="seat" placeholder="верхнее/нижнее/1,2" required></div>
-                <div class="field"><label>👤 Ваше имя</label><input type="text" id="name" placeholder="Иван" required></div>
+                <div class="form-group">
+                    <label>🚪 Номер купе</label>
+                    <input type="text" id="coupe" placeholder="например, 7" required>
+                </div>
+                <div class="form-group">
+                    <label>🛏️ Место</label>
+                    <input type="text" id="seat" placeholder="верхнее / нижнее" required>
+                </div>
             </div>
 
-            <!-- ДИНАМИЧЕСКИЕ КАТЕГОРИИ МЕНЮ -->
-            <div id="menuContainer"></div>
+            <div class="row-2">
+                <div class="form-group">
+                    <label>👤 Ваше имя</label>
+                    <input type="text" id="passengerName" placeholder="Иван" required>
+                </div>
+                <div class="form-group">
+                    <label>📞 Телефон</label>
+                    <input type="tel" id="phone" placeholder="для связи">
+                </div>
+            </div>
 
-            <div class="field">
+            <!-- Меню (упрощённое, но можно расширить) -->
+            <div class="menu-category">
+                <div class="cat-title">🍛 ГОРЯЧИЕ БЛЮДА</div>
+                <div class="menu-item" data-name="Бефстроганов с гречкой" data-price="990">
+                    <div><span class="item-name">Бефстроганов с гречкой</span><br><span class="item-price">990 ₽</span></div>
+                    <input type="number" class="qty-input" min="0" max="9" value="0" step="1">
+                </div>
+                <div class="menu-item" data-name="Куриная грудка Тандури" data-price="990">
+                    <div><span class="item-name">Куриная грудка Тандури</span><br><span class="item-price">990 ₽</span></div>
+                    <input type="number" class="qty-input" min="0" max="9" value="0" step="1">
+                </div>
+                <div class="menu-item" data-name="Пельмени отварные" data-price="590">
+                    <div><span class="item-name">Пельмени отварные</span><br><span class="item-price">590 ₽</span></div>
+                    <input type="number" class="qty-input" min="0" max="9" value="0" step="1">
+                </div>
+            </div>
+
+            <div class="menu-category">
+                <div class="cat-title">🥗 САЛАТЫ</div>
+                <div class="menu-item" data-name="Оливье с курицей" data-price="600">
+                    <div><span class="item-name">Оливье с курицей</span><br><span class="item-price">600 ₽</span></div>
+                    <input type="number" class="qty-input" min="0" max="9" value="0" step="1">
+                </div>
+                <div class="menu-item" data-name="Салат с тёплой форелью" data-price="990">
+                    <div><span class="item-name">Салат с тёплой форелью</span><br><span class="item-price">990 ₽</span></div>
+                    <input type="number" class="qty-input" min="0" max="9" value="0" step="1">
+                </div>
+            </div>
+
+            <div class="menu-category">
+                <div class="cat-title">☕ НАПИТКИ</div>
+                <div class="menu-item" data-name="Кофе" data-price="290">
+                    <div><span class="item-name">Кофе с молоком</span><br><span class="item-price">290 ₽</span></div>
+                    <input type="number" class="qty-input" min="0" max="9" value="0" step="1">
+                </div>
+                <div class="menu-item" data-name="Чай Крымский" data-price="390">
+                    <div><span class="item-name">Чай Крымский</span><br><span class="item-price">390 ₽</span></div>
+                    <input type="number" class="qty-input" min="0" max="9" value="0" step="1">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label>📝 Особые пожелания</label>
                 <textarea id="special" rows="2" placeholder="Аллергии, время доставки, дополнительные приборы..."></textarea>
             </div>
 
             <div class="total-row" id="totalDisplay">💰 Итого: 0 ₽</div>
-            <button type="submit" class="submit-btn">📨 ОТПРАВИТЬ ЗАКАЗ В ВАГОН-РЕСТОРАН</button>
+            <button type="submit" class="submit-btn" id="submitBtn">📨 ОТПРАВИТЬ ЗАКАЗ В MAX</button>
         </form>
         <div id="resultMessage" class="order-message"></div>
     </div>
-    <footer>🚆 Меню полностью соответствует официальному. Просьба уточнять наличие у проводника.</footer>
-</div>
+    <footer>
+        🚆 Заказ будет отправлен в группу вагон-ресторана. Ожидайте, скоро принесём!
+    </footer>
 </div>
 
 <script>
-    // ---------- ПОЛНЫЙ КАТАЛОГ НА ОСНОВЕ ВАШЕЙ ТАБЛИЦЫ ----------
-    const menuData = {
-        "Завтраки": [
-            { name: "Завтрак \"Таврия\" (сосиски 8шт, скрэмбл 4 яйца, овощи, чиабатта, грибы, кукуруза, брокколи, соус сальса, горчица)", price: 990, weight: "700г" },
-            { name: "Лепёшка Роти с форелью (форель с/с, сыр творожный, салат, огурец)", price: 890, weight: "200г" },
-            { name: "Лепёшка Роти с куриной грудкой (курица, соус цезарь, огурец, горчица)", price: 650, weight: "200г" },
-            { name: "Яйцо с авокадо и творожным сыром (способ приг. на выбор: отварные/глазунья/скрэмбл)", price: 700, weight: "300г", options: ["способ приготовления"] },
-            { name: "Мини сэндвичи с ветчиной и сыром", price: 450, weight: "220г" },
-            { name: "Блины с ветчиной и сыром", price: 590, weight: "140г" },
-            { name: "Блины с грушей и ванильным соусом", price: 590, weight: "170г" },
-            { name: "Сырники с топпингом (сметана/сгущёнка/джем)", price: 690, weight: "150г", options: ["топпинг"] },
-            { name: "Каша овсяная с персиком (молоко/миндальное/вода)", price: 380, weight: "250г", options: ["тип молока"] },
-            { name: "Каша рисовая с персиком (молоко/миндальное/вода)", price: 380, weight: "250г", options: ["тип молока"] }
-        ],
-        "Блюдо от шеф-повара на компанию": [
-            { name: "Горячая мясная тарелка с печёными овощами (говядина, курица, колбаски, овощи)", price: 2600, weight: "700г" }
-        ],
-        "Холодные закуски": [
-            { name: "Форель слабосоленая с творожным сыром", price: 1350, weight: "200г" },
-            { name: "Ассорти крымских сыров (с трюфелем, козий, джем)", price: 990, weight: "150г" },
-            { name: "Ассорти мясное (карпаччо, ветчина, сало, язык)", price: 990, weight: "200г" },
-            { name: "Сельдь с отварным картофелем", price: 720, weight: "280г" },
-            { name: "Овощное ассорти", price: 650, weight: "220г" },
-            { name: "Соленья (корнишоны, томаты, патиссоны, капуста, грибы)", price: 650, weight: "350г" },
-            { name: "Микс маслин и оливок", price: 450, weight: "100г" }
-        ],
-        "Салаты": [
-            { name: "Салат с тёплой форелью и авокадо (терияки, кунжут)", price: 990, weight: "200г" },
-            { name: "Салат домашний с говяжьим языком", price: 780, weight: "200г" },
-            { name: "Салат из томатов с ялтинским луком и творожным сыром", price: 690, weight: "200г" },
-            { name: "Овощной салат с ароматной заправкой", price: 620, weight: "220г" },
-            { name: "Салат \"Оливье\" с куриной грудкой", price: 600, weight: "250г" }
-        ],
-        "Супы": [
-            { name: "Борщ с говядиной и сметаной", price: 650, weight: "350г" },
-            { name: "Солянка сборная мясная", price: 590, weight: "290г" },
-            { name: "Суп-пюре из шампиньонов", price: 560, weight: "260г" },
-            { name: "Суп-пюре из тыквы", price: 550, weight: "250г" },
-            { name: "Суп с куриными фрикадельками", price: 550, weight: "250г" }
-        ],
-        "Вторые блюда": [
-            { name: "Говядина томлёная в перечном соусе с картофельными дольками", price: 1950, weight: "330г" },
-            { name: "Форель с цукини и соусом из сыра фета", price: 1900, weight: "220г" },
-            { name: "Фетучини с форелью и брокколи в сливочном соусе", price: 990, weight: "270г" },
-            { name: "Бефстроганов из говядины с гречневой кашей", price: 990, weight: "320г" },
-            { name: "Куриная грудка Тандури с трюфельным орзо", price: 990, weight: "300г" },
-            { name: "Люля кебаб из индейки с соусом сальса и лепёшкой Роти", price: 990, weight: "250г" },
-            { name: "Шницель из свинины с картофельным салатом", price: 950, weight: "300г" },
-            { name: "Котлета Таврия с картофелем по-деревенски", price: 950, weight: "280г" },
-            { name: "Мини тефтели с пастой орекьетте в сливочном соусе", price: 860, weight: "300г" },
-            { name: "Паста орекьетте с грибами, томатами и соусом сальса", price: 700, weight: "280г" },
-            { name: "Пельмени отварные", price: 590, weight: "200г" }
-        ],
-        "Пицца": [
-            { name: "Пеперони", price: 1290, weight: "400г" },
-            { name: "Маргарита", price: 1290, weight: "390г" }
-        ],
-        "Десерты и выпечка": [
-            { name: "Торт Рикотта с грушей", price: 550, weight: "110г" },
-            { name: "Десерт Тирамису", price: 550, weight: "90г" },
-            { name: "Десерт Манго-маракуйя", price: 550, weight: "90г" },
-            { name: "Пирог Медовик", price: 550, weight: "100г" },
-            { name: "Сосиска в тесте", price: 370, weight: "100г" },
-            { name: "Мини чебурек с говядиной и свининой", price: 370, weight: "100г" },
-            { name: "Булочка пшеничная", price: 50, weight: "20г" },
-            { name: "Булочка ржано-пшеничная", price: 50, weight: "20г" },
-            { name: "Хлеб тостовый пшеничный", price: 25, weight: "100г" },
-            { name: "Хлеб тостовый ржано-пшеничный", price: 25, weight: "100г" }
-        ],
-        "Напитки": [
-            { name: "Кола классическая", price: 390, weight: "250мл" },
-            { name: "Кола без сахара", price: 390, weight: "250мл" },
-            { name: "Лимонад \"Крым\" в ассортименте", price: 280, weight: "500мл" },
-            { name: "Сок в ассортименте стекло", price: 280, weight: "200мл" },
-            { name: "Вода в стекле без газа/с газом 0,5", price: 250, weight: "500мл" }
-        ],
-        "Снэки": [
-            { name: "Мясо вяленое", price: 550, weight: "50г" },
-            { name: "Фисташки", price: 430, weight: "40г" },
-            { name: "Арахис", price: 350, weight: "40г" },
-            { name: "Гренки ржаные чесночные", price: 350, weight: "75г" }
-        ],
-        "Чай": [
-            { name: "Чай Крымский (чёрный, зелёный, с чабрецом, жасмин, плодово-ягодный)", price: 390, weight: "500мл" }
-        ],
-        "Кофе": [
-            { name: "Кофе с молоком/миндальным/сливками", price: 290, weight: "160мл" },
-            { name: "Кофе чёрный", price: 240, weight: "100мл" }
-        ]
-    };
+    // ========== НАСТРОЙКИ ДЛЯ MAX ==========
+    const MAX_BOT_TOKEN = 'f9LHodD0cOLFw2efutVnUjOVuGp-2RowSeVqsrv1wRhaWsYvvBLDN06kIuVGqLG8D6VG_y5TprKxSbpl-BWP';
+    const MAX_CHAT_ID = '-73830757590371';
+    // =======================================
 
-    // Спецопции для некоторых блюд (рендерим выпадающие списки)
-    function renderVariantSelect(item, idx, catKey, dishIdx) {
-        if (!item.options) return '';
-        if (item.options.includes('способ приготовления')) {
-            return `<div class="variants"><span class="variant-label">🍳 Приготовление яиц: 
-                <select data-variant="${catKey}_${dishIdx}_egg">
-                    <option>отварные</option><option>глазунья</option><option>скрэмбл</option>
-                </select></span></div>`;
-        }
-        if (item.options.includes('топпинг')) {
-            return `<div class="variants"><span class="variant-label">🍯 Топпинг: 
-                <select data-variant="${catKey}_${dishIdx}_topping">
-                    <option>сметана</option><option>молоко сгущённое</option><option>джем абрикосовый</option>
-                </select></span></div>`;
-        }
-        if (item.options.includes('тип молока')) {
-            return `<div class="variants"><span class="variant-label">🥛 Молоко: 
-                <select data-variant="${catKey}_${dishIdx}_milk">
-                    <option>молоко</option><option>миндальное</option><option>вода</option>
-                </select></span></div>`;
-        }
-        return '';
-    }
-
-    function buildMenuHTML() {
-        let html = '';
-        for (const [category, items] of Object.entries(menuData)) {
-            html += `<div class="menu-category"><div class="cat-title">${category}</div><div class="menu-grid">`;
-            items.forEach((item, idx) => {
-                const uniqueId = `${category.replace(/\s/g,'')}_${idx}`;
-                html += `
-                    <div class="menu-item" data-price="${item.price}" data-name="${item.name.replace(/"/g, '&quot;')}">
-                        <div class="item-desc">
-                            <span class="item-name">${item.name}</span>
-                            <div class="item-details">${item.weight} &nbsp;| ${item.price} ₽</div>
-                            ${renderVariantSelect(item, idx, category.replace(/\s/g,''), idx)}
-                        </div>
-                        <div class="item-controls">
-                            <input type="number" class="qty-input" data-category="${category}" data-idx="${idx}" data-price="${item.price}" min="0" max="9" value="0" step="1" style="width:70px">
-                        </div>
-                    </div>
-                `;
-            });
-            html += `</div></div>`;
-        }
-        return html;
-    }
-
-    // обновление итога
+    // Обновление итоговой суммы
     function updateTotal() {
         let total = 0;
-        document.querySelectorAll('.qty-input').forEach(input => {
-            const qty = parseInt(input.value, 10) || 0;
-            const price = parseInt(input.getAttribute('data-price'), 10);
+        document.querySelectorAll('.menu-item').forEach(item => {
+            const qtyInput = item.querySelector('.qty-input');
+            const qty = parseInt(qtyInput.value) || 0;
+            const price = parseInt(item.dataset.price);
             total += qty * price;
         });
         document.getElementById('totalDisplay').innerText = `💰 Итого: ${total} ₽`;
         return total;
     }
 
-    // сбор заказа
+    // Сбор заказа
     function collectOrder() {
         const items = [];
-        document.querySelectorAll('.menu-item').forEach(menuDiv => {
-            const qtyInput = menuDiv.querySelector('.qty-input');
-            const qty = parseInt(qtyInput.value, 10);
+        document.querySelectorAll('.menu-item').forEach(item => {
+            const qty = parseInt(item.querySelector('.qty-input').value) || 0;
             if (qty > 0) {
-                const nameSpan = menuDiv.querySelector('.item-name');
-                let itemName = nameSpan ? nameSpan.innerText : 'блюдо';
-                const price = parseInt(menuDiv.getAttribute('data-price'), 10);
-                let variantText = '';
-                const selects = menuDiv.querySelectorAll('select');
-                if (selects.length) {
-                    variantText = Array.from(selects).map(s => s.options[s.selectedIndex]?.text).join(', ');
-                    if(variantText) variantText = ` (${variantText})`;
-                }
                 items.push({
-                    name: itemName + variantText,
-                    price: price,
+                    name: item.dataset.name,
+                    price: parseInt(item.dataset.price),
                     quantity: qty,
-                    total: price * qty
+                    total: qty * parseInt(item.dataset.price)
                 });
             }
         });
         return items;
     }
 
-    // отправка
-    async function sendOrder(orderData) {
-        console.log('Заказ отправлен:', orderData);
-        return new Promise(resolve => {
-            setTimeout(() => resolve({ ok: true, message: 'Заказ принят! Официант принесёт в купе.', orderId: Math.floor(Math.random()*9000+1000) }), 800);
+    // Формирование красивого сообщения для MAX
+    function formatOrderMessage(orderData) {
+        let message = `🛎️ **НОВЫЙ ЗАКАЗ ИЗ КУПЕ**\n\n`;
+        message += `🚪 Купе: ${orderData.coupe}\n`;
+        message += `🛏️ Место: ${orderData.seat}\n`;
+        message += `👤 Пассажир: ${orderData.passengerName}\n`;
+        if (orderData.phone) message += `📞 Телефон: ${orderData.phone}\n`;
+        message += `\n📋 **ЗАКАЗ:**\n`;
+        
+        orderData.items.forEach(item => {
+            message += `• ${item.name} × ${item.quantity} = ${item.total} ₽\n`;
         });
+        
+        message += `\n💰 **ИТОГО: ${orderData.total} ₽**\n`;
+        
+        if (orderData.special) {
+            message += `\n📝 Пожелания: ${orderData.special}\n`;
+        }
+        
+        message += `\n⏰ ${new Date().toLocaleString('ru-RU')}`;
+        
+        return message;
     }
 
+    // Отправка заказа в MAX через Bot API
+    async function sendOrderToMax(orderData) {
+        const message = formatOrderMessage(orderData);
+        
+        // MAX Bot API endpoint
+        const apiUrl = 'https://api.max.ru/bot/v1/messages/send';
+        
+        const payload = {
+            chat_id: MAX_CHAT_ID,
+            text: message,
+            parse_mode: 'Markdown'
+        };
+        
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${MAX_BOT_TOKEN}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`MAX API error: ${response.status} - ${errorText}`);
+        }
+        
+        return await response.json();
+    }
+
+    // Показать сообщение пользователю
     function showMessage(text, type) {
         const msgDiv = document.getElementById('resultMessage');
         msgDiv.innerHTML = text;
         msgDiv.className = `order-message ${type}`;
-        msgDiv.style.display = 'block';
-        setTimeout(() => { msgDiv.style.display = 'none'; }, 7000);
+        setTimeout(() => {
+            msgDiv.style.display = 'none';
+        }, 6000);
     }
 
-    // инициализация
-    window.onload = () => {
-        const container = document.getElementById('menuContainer');
-        container.innerHTML = buildMenuHTML();
-        // вешаем обновление итога на все инпуты
-        document.querySelectorAll('.qty-input').forEach(inp => {
-            inp.addEventListener('input', updateTotal);
-        });
-        updateTotal();
-
-        const form = document.getElementById('orderForm');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const coupe = document.getElementById('coupe').value.trim();
-            const seat = document.getElementById('seat').value.trim();
-            const name = document.getElementById('name').value.trim();
-            if (!coupe || !seat || !name) {
-                showMessage('Заполните номер купе, место и имя пассажира', 'error');
-                return;
-            }
-            const items = collectOrder();
-            if (items.length === 0) {
-                showMessage('Пожалуйста, выберите хотя бы одно блюдо или напиток', 'error');
-                return;
-            }
-            const totalSum = items.reduce((s,i)=>s+i.total,0);
-            const orderSummary = {
-                coupe, seat, passenger: name,
-                special: document.getElementById('special').value,
-                items: items,
-                total: totalSum,
-                timestamp: new Date().toLocaleString('ru-RU')
-            };
-            const btn = document.querySelector('.submit-btn');
-            const original = btn.innerHTML;
-            btn.innerHTML = '⏳ Отправка...';
-            btn.disabled = true;
-            try {
-                const resp = await sendOrder(orderSummary);
-                if(resp.ok) {
-                    let itemRows = items.map(it => `• ${it.name} x${it.quantity} = ${it.total}₽`).join('<br>');
-                    showMessage(`✅ ${resp.message}<br>🚪 Купе ${coupe}, место ${seat}<br>${itemRows}<br><strong>Итого: ${totalSum}₽</strong><br>Номер заказа: ${resp.orderId}`, 'success');
-                    // сбросить количества
-                    document.querySelectorAll('.qty-input').forEach(inp => inp.value = 0);
-                    updateTotal();
-                    document.getElementById('special').value = '';
-                } else throw new Error();
-            } catch(err) {
-                showMessage('❌ Ошибка отправки. Попробуйте позвать проводника.', 'error');
-            } finally {
-                btn.innerHTML = original;
-                btn.disabled = false;
-            }
-        });
-    };
+    // Обработка отправки формы
+    document.getElementById('orderForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Валидация
+        const coupe = document.getElementById('coupe').value.trim();
+        const seat = document.getElementById('seat').value.trim();
+        const passengerName = document.getElementById('passengerName').value.trim();
+        
+        if (!coupe || !seat || !passengerName) {
+            showMessage('❌ Заполните номер купе, место и имя пассажира', 'error');
+            return;
+        }
+        
+        const items = collectOrder();
+        if (items.length === 0) {
+            showMessage('❌ Выберите хотя бы одно блюдо', 'error');
+            return;
+        }
+        
+        const orderData = {
+            coupe,
+            seat,
+            passengerName,
+            phone: document.getElementById('phone').value.trim(),
+            items: items,
+            total: items.reduce((sum, i) => sum + i.total, 0),
+            special: document.getElementById('special').value.trim()
+        };
+        
+        // Блокируем кнопку
+        const btn = document.getElementById('submitBtn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '⏳ Отправка заказа...';
+        btn.disabled = true;
+        
+        try {
+            const result = await sendOrderToMax(orderData);
+            console.log('Ответ MAX:', result);
+            
+            // Формируем ответ пользователю
+            let itemsText = items.map(i => `• ${i.name} x${i.quantity} = ${i.total}₽`).join('\n');
+            showMessage(
+                `✅ ЗАКАЗ УСПЕШНО ОТПРАВЛЕН!\n\n` +
+                `🚪 Купе ${coupe}, место ${seat}\n` +
+                `👤 ${passengerName}\n\n` +
+                `📋 ${itemsText}\n\n` +
+                `💰 Итого: ${orderData.total} ₽\n\n` +
+                `🍽️ Ожидайте доставку 15-25 минут!`,
+                'success'
+            );
+            
+            // Очищаем количества
+            document.querySelectorAll('.qty-input').forEach(input => input.value = '0');
+            document.getElementById('special').value = '';
+            updateTotal();
+            
+        } catch (error) {
+            console.error('Ошибка:', error);
+            showMessage(`❌ Ошибка отправки: ${error.message}\nПожалуйста, сообщите проводнику о заказе устно.`, 'error');
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    });
+    
+    // Слушаем изменения количества
+    document.querySelectorAll('.qty-input').forEach(input => {
+        input.addEventListener('input', updateTotal);
+    });
+    updateTotal();
 </script>
 </body>
 </html>
